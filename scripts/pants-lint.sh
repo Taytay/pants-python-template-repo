@@ -1,4 +1,5 @@
 #!/bin/bash
-pants lint ::
-pants tailor --check ::
-pants update-build-files --check ::
+pants lint \
+  tailor --check \
+  update-build-files --check \
+  ::

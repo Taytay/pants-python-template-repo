@@ -8,20 +8,12 @@ name: Pants
 on: [push, pull_request]
 
 jobs:
-  org-check:
-    name: Check GitHub Organization
-    if: ${{ github.repository_owner == 'pantsbuild' }}
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Noop
-        run: "true"
   build:
-    name: Perform CI Checks
-    needs: org-check
+    name: Perform CI Checks using Pants
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        python-version: [3.9]
+        python-version: [3.10]
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
@@ -47,23 +39,23 @@ jobs:
         # but will cause the cache entry to grow without bound over time.
         # See https://pants.readme.io/docs/using-pants-in-ci for tips on how to periodically clean it up.
         # Alternatively you change gha-cache-key to ignore old caches.
-    - name: Check BUILD files
+    - name: Lint
       run: |
-        pants tailor --check update-build-files --check ::
-    - name: Lint and typecheck
+        ./scripts/pants-lint.sh
+    - name: Typecheck
       run: |
-        pants lint check ::
+        ./scripts/pants-check.sh
     - name: Test
       run: |
-        pants test ::
+        ./scripts/pants-test.sh
     - name: Package / Run
       run: |
         # We also smoke test that our release process will work by running `package`.
-        pants package ::
+        ./scripts/pants-package.sh
         pants run helloworld/:pex_binary
-    - name: Upload pants log
-      uses: actions/upload-artifact@v3
-      with:
-        name: pants-log
-        path: .pants.d/workdir/pants.log
-      if: always()  # We want the log even on failures.
+    # - name: Upload pants log
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: pants-log
+    #     path: .pants.d/workdir/pants.log
+    #   if: always()  # We want the log even on failures.

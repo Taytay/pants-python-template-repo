@@ -41,23 +41,19 @@ jobs:
         # Alternatively you change gha-cache-key to ignore old caches.
     - name: Lint
       run: |
-          cd ${{ github.workspace }}
           ./scripts/pants-lint.sh
     - name: Typecheck
       run: |
-          cd ${{ github.workspace }}
           ./scripts/pants-check.sh
     - name: Test
       run: |
-          cd ${{ github.workspace }}
           ./scripts/pants-test.sh
     - name: Package / Run
       run: |
-          cd ${{ github.workspace }}
           # We also smoke test that our release process will work by running `package`.
           ./scripts/pants-package.sh
           pants run helloworld/:pex_binary
-          
+
     # - name: Upload pants log
     #   uses: actions/upload-artifact@v3
     #   with:

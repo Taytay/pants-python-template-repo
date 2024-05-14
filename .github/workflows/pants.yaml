@@ -52,7 +52,9 @@ jobs:
       run: |
           # We also smoke test that our release process will work by running `package`.
           ./scripts/pants-package.sh
-          pants run helloworld/:pex_binary
+          # Test them:
+          pants run src/python/helloworld/:pex_binary
+          pants run src/docker/math_fun/cli/Dockerfile
 
     # - name: Upload pants log
     #   uses: actions/upload-artifact@v3

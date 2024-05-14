@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Function to print usage and exit
+usage() {
+  echo "Usage: $0 <python_script_or_command> [args...]"
+  echo "Runs the default python specified in pants.toml for an aribtrary file"
+  echo "(For a project managed by pants, just use 'pants run' instead of this! It's safer!)"
+  exit 1
+}
+
+
+# Function to parse pants.toml for the interpreter constraint
+get_python_version() {
+  grep -oP '(?<=interpreter_constraints = \["CPython==)[^"]+' pants.toml
+}
+
+# Get the Python version from pants.toml
+python_version=$(get_python_version)
+
+# Check if the Python version was found
+if [ -z "$python_version" ]; then
+  echo "Error: Python version not found in pants.toml"
+  exit 1
+fi
+
+# Set the path to the exported virtualenv
+export_dir="dist/export/python/virtualenvs/python-default/$python_version/bin/activate"
+
+# Check if the activate script exists
+if [ ! -f "$export_dir" ]; then
+  echo "Error: Activate script not found at $export_dir"
+  exit 1
+fi
+
+# Activate the virtual environment
+source "$export_dir"
+
+# Run the Python command with passed arguments
+python "$@"

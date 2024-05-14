@@ -1,0 +1,3 @@
+FROM python:3.10-slim
+ENTRYPOINT ["/bin/main.pex"]
+COPY src.python.libs.base/main.pex /bin

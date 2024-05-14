@@ -1,0 +1,26 @@
+# Got a fair amount from here: https://github.com/pantsbuild/pants/blob/2858e1e0957e36ac6a2d64d264872152738c14e6/3rdparty/python/BUILD
+python_requirements(
+    name="pytest",
+    source="pytest-requirements.txt",
+    resolve="pytest",
+)
+python_requirements(
+    name="ruff",
+    source="ruff-requirements.txt",
+    resolve="ruff",
+)
+python_requirements(
+    name="black",
+    source="black-requirements.txt",
+    resolve="black",
+)
+python_requirements(
+    name="mypy",
+    source="mypy-requirements.txt",
+    resolve="mypy",
+)
+python_requirements(
+    name="coveragepy",
+    source="coveragepy-requirements.txt",
+    resolve="coverage-py",
+)

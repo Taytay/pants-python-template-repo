@@ -14,20 +14,20 @@ pex_binary(
     name="pex_binary",
     entry_point="main.py",
     # Got these settings from: https://www.pantsbuild.org/blog/2022/08/02/optimizing-python-docker-deploys-using-pants
-    layout = "packed",
-    execution_mode = "venv",
-    include_tools = True
+    layout="packed",
+    execution_mode="venv",
+    include_tools=True,
 )
 
 
 docker_image(
-    name = "img",
-    #repository = "app",
-    instructions = [
+    name="img",
+    # repository = "app",
+    instructions=[
         "FROM python:3.10-slim",
         'ENTRYPOINT ["/usr/local/bin/python3.10", "/bin/app"]',
         "COPY src.python.helloworld/pex_binary.pex /bin/app",
-    ]
+    ],
 )
 
 # docker_image(

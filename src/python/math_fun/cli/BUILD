@@ -7,7 +7,6 @@ python_sources()
 pex_binary(
     name="pex_binary",
     entry_point="math_fun.cli.main:main",
-    
     # By specifying a custom `platforms` list, we could build this binary for Mac and Linux so it can be used
     # anywhere.
     # However, when I tried this, I got a hang: Building 2 requirements for src.python.math_fun.cli/pex_binary.pex from the python-default.lock resolve: click==8.1.7, numpy==1.26.4

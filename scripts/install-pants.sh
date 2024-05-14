@@ -12,3 +12,9 @@ if ! command -v pants &> /dev/null; then
   # shellcheck disable=SC2016
   echo 'export PATH="$PATH:/teamspace/studios/this_studio/.local/bin"'
 fi
+
+echo "Pants version:"
+pants --version
+
+echo "Making sure pants is working by listing goals..."
+pants help goals

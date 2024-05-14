@@ -1,34 +1,54 @@
 
+# Inspired by:
+
+# https://github.com/StephanErb/pexample/blob/main/pants.toml
+# https://github.com/Curt-Park/python-monorepo-template
+
 # Commands you need to know
 
 ```bash
+
+
+
 # How to execute
-pants run src/python/libs/base/main.py
-pants run src/python/libs/fancy/main.py
+pants run src/python/helloworld/main.py
+pants run src/python/math_fun/cli/main.py
+
+pants run src/docker/math_fun/cli/Dockerfile
 
 # How to format
 pants fmt ::             # for all projects
-pants fmt src/python/libs/base::    # for base
-pants fmt src/python/libs/fancy::   # for fancy
+pants fmt src/python/helloworld::    # for helloworld
+pants fmt src/python/math_fun/cli::   # for fancy
 
 # How to lint
 pants lint ::            # for all projects
-pants lint src/python/libs/base::   # for base
-pants lint src/python/libs/fancy::  # for fancy
+pants lint src/python/helloworld::   # for helloworld
+pants lint src/python/math_fun/cli::  # for math_fun
 
 # How to type-check
 pants check ::            # for all projects
-pants check src/python/libs/base::   # for base
-pants check src/python/libs/fancy::  # for fancy
+pants check src/python/helloworld::   # for helloworld
+pants check src/python/math_fun/cli::  # for math_fun
 
 # How to run unit tests
 pants test ::            # for all projects
-pants test src/python/libs/base::   # for base
-pants test src/python/libs/fancy::  # for fancy
+pants test src/python/helloworld::   # for helloworld
+pants test src/python/math_fun/cli::  # for math_fun
 
-# Build docker images
-pants package docker/Dockerfile.base    # build base
-pants package docker/Dockerfile.fancy   # build fancy
+# Building/packaging
+pants package ::            # for all projects
+pants package src/python::   # for all python
+pants package src/docker::   # for all docker
+pants package src/python/helloworld::   # for helloworld
+pants package src/python/math_fun/cli::  # for math_fun
+
+# Build docker image
+pants package src/docker/math_fun/cli    # build base
+
+# Run docker image
+pants run src/docker/math_fun/cli    # build base
+
 ```
 
 # VSCode:

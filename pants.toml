@@ -5,6 +5,8 @@
 pants_version = "2.20.0"
 backend_packages.add = [
   "pants.backend.python",
+  # If you uncomment the pyenv backend, it auto-installs the correct python version for us. However, that is pretty slow (like 2-3 minutes to install python). Also, it installs unoptimized python by default
+  # "pants.backend.python.providers.experimental.pyenv",
   "pants.backend.docker",
   "pants.backend.python.mixed_interpreter_constraints",
   "pants.backend.python.typecheck.mypy",
@@ -35,20 +37,28 @@ unowned_dependency_behavior = "error"
 
 [source]
 # We make our root src/python
-root_patterns = ["/src/python", "/3rdparty"]
+root_patterns = ["/src/python", "/tests/python", "/3rdparty"]
 
 [python]
 # The default interpreter constraints for code in this repo. Individual targets can override
 #  this with the `interpreter_constraints` field. See
 #  https://www.pantsbuild.org/docs/python-interpreter-compatibility.
+
+# After changing the version of python or pip: 
+# 0: Ensure it's installed.
+# 1: Run: `./scripts/pants-refresh-after-python-update.sh`
+# 2: Then, grep through the whole repo for the old value, and change it to this new value
+# For example, if you change from 3.10.10 to 3.10.14, you'll need to change it in the src/docker/math_fun/cli/Dockerfile as well because you need to change the base image to match.
+# If you see 3.10.10 in a pants lockfile, ignore it. You just need to regenerate that lockfile. (You did do step #1 right?!?)
+# (Yes, there is probably a better way to keep all of these versions the same! I just don't know it yet...)
+# lighting studios uses 3.10.10, so that's what we use here
+interpreter_constraints = ["CPython==3.10.*"]
+pip_version = "24.0"
+
 # Enable the "resolves" mechanism, which turns on lockfiles for user code. See
 # https://www.pantsbuild.org/docs/python-third-party-dependencies. This also adds the
 # `generate-lockfiles` goal for Pants to generate the lockfile for you.
 enable_resolves = true
-# After changing this, don't forget to regenerate lockfiles
-# then, re-run pants-export and update your local IDE
-interpreter_constraints = ["CPython==3.10.10"]
-pip_version = "24.0"
 
 [python-bootstrap]
 # We search for interpreters both on the $PATH and in the `$(pyenv root)/versions` folder.
@@ -73,15 +83,6 @@ pytest = "3rdparty/python/pytest.lock"
 coverage-py = "3rdparty/python/coverage-py.lock"
 mypy = "3rdparty/python/mypy.lock"
 
-# [docformatter]
-# args = ["--wrap-summaries=100", "--wrap-descriptions=100"]
-
-# [flake8]
-# config = "build-support/flake8/.flake8"
-# source_plugins = ["build-support/flake8"]
-# install_from_resolve = "flake8"
-# requirements = ["//3rdparty/python:flake8"]
-
 [shellcheck]
 args = ["--external-sources"]
 
@@ -90,8 +91,7 @@ args = ["--external-sources"]
 args = ["-i 2", "-ci", "-sr"]
 
 [pytest]
-args = ["--no-header", "-vv"]
+args = ["-vv"] #"--no-header", 
 execution_slot_var = "TEST_EXECUTION_SLOT"
 install_from_resolve = "pytest"
-#requirements = ["//3rdparty/python:pytest"]
 

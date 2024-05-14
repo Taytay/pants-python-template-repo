@@ -6,7 +6,7 @@
 // {
 //   "version": 3,
 //   "valid_for_interpreter_constraints": [
-//     "CPython==3.10.10"
+//     "CPython==3.10.*"
 //   ],
 //   "generated_with_requirements": [
 //     "ruff-lsp~=0.0.49",
@@ -319,7 +319,7 @@
     "ruff~=0.1.11"
   ],
   "requires_python": [
-    "==3.10.10"
+    "==3.10.*"
   ],
   "resolver_version": "pip-2020-resolver",
   "style": "universal",
